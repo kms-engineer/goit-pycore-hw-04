@@ -1,10 +1,11 @@
 from pathlib import Path
+from typing import List, Dict, Union
 from cat import read_cat_data
 
-def get_cats_info(path):
+def get_cats_info(path: Union[str, Path]) -> List[Dict[str, str]]:
     return read_cat_data(path)
 
-def main():
+def main() -> None:
     current_dir = Path(__file__).parent
     cats_file = current_dir / "cats.txt"
 

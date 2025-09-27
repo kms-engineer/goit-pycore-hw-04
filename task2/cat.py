@@ -1,11 +1,12 @@
 from pathlib import Path
+from typing import List, Dict, Union
 
-def read_cat_data(file_path):
+def read_cat_data(file_path: Union[str, Path]) -> List[Dict[str, str]]:
     path = Path(file_path)
     if not path.exists():
         raise FileNotFoundError(f"File '{file_path}' not found")
 
-    cats = []
+    cats: List[Dict[str, str]] = []
     with path.open('r', encoding='utf-8') as file:
         for line in file:
             line = line.strip()

@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from typing import Union
 from colorama import Fore, Style
 
 COLOR_DIR = Fore.BLUE
@@ -7,7 +8,7 @@ COLOR_FILE = Fore.GREEN
 COLOR_TREE = Fore.BLACK
 COLOR_ERROR = Fore.RED
 
-def main():
+def main() -> None:
     if len(sys.argv) < 2:
         print("Usage: python main.py <directory_path>")
         sys.exit(1)
@@ -26,7 +27,7 @@ def main():
         print(f"Error: {e}")
         sys.exit(1)
 
-def show_dir_structure(directory, level=1):
+def show_dir_structure(directory: Union[str, Path], level: int = 1) -> None:
     path = Path(directory)
     prefix = '    ' * level
 
@@ -43,7 +44,7 @@ def show_dir_structure(directory, level=1):
         else:
             print(f"{prefix}{COLOR_FILE}{item.name}{Style.RESET_ALL}")
 
-def validate_directory_path(path_str):
+def validate_directory_path(path_str: str) -> Path:
     path = Path(path_str)
 
     if not path.exists():

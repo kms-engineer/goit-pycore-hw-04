@@ -1,7 +1,8 @@
 import re
+from typing import Dict, List, Tuple, Callable, Union
 
-def main():
-    contacts = {}
+def main() -> None:
+    contacts: Dict[str, str] = {}
     print("Welcome to the assistant bot!\n"
           "Available commands:\n"
           "  hello                     - Show greeting\n"
@@ -32,7 +33,7 @@ def main():
             print(f"Error: {e}")
             break
 
-def parse_input(user_input):
+def parse_input(user_input: str) -> Tuple[str, List[str]]:
     args = user_input.split()
     if not args:
         return "", []
@@ -41,8 +42,8 @@ def parse_input(user_input):
     args = args[1:] if len(args) > 1 else []
     return command, args
 
-def handle_command(command, args, contacts):
-    commands = {
+def handle_command(command: str, args: List[str], contacts: Dict[str, str]) -> str:
+    commands: Dict[str, Callable[[List[str], Dict[str, str]], str]] = {
         "hello": lambda args, contacts: "How can I help you?",
         "add": add_contact,
         "change": change_contact,
@@ -59,7 +60,7 @@ def handle_command(command, args, contacts):
             available = ', '.join(sorted(commands.keys()) + ['close', 'exit'])
             return f"Invalid command. Available commands: {available}"
 
-def validate_phone(phone):
+def validate_phone(phone: str) -> str:
     if not re.match(r'^[+\-()\d\s]+$', phone):
         raise ValueError("Phone number can only contain digits, spaces, parentheses (), hyphens -, and plus sign +")
 
@@ -69,7 +70,7 @@ def validate_phone(phone):
 
     return phone
 
-def parse_contact_args(args, required_count, operation):
+def parse_contact_args(args: List[str], required_count: int, operation: str) -> Union[str, Tuple[str, str]]:
     if len(args) < required_count:
         missing = required_count - len(args)
         arg_names = ["username", "phone"] if required_count == 2 else ["username"]
@@ -83,7 +84,7 @@ def parse_contact_args(args, required_count, operation):
 
     return args[:required_count]
 
-def add_contact(args, contacts):
+def add_contact(args: List[str], contacts: Dict[str, str]) -> str:
     try:
         username, phone = parse_contact_args(args, 2, "Add command")
     except ValueError as e:
@@ -95,7 +96,7 @@ def add_contact(args, contacts):
     contacts[username] = phone
     return "Contact added."
 
-def change_contact(args, contacts):
+def change_contact(args: List[str], contacts: Dict[str, str]) -> str:
     try:
         username, phone = parse_contact_args(args, 2, "Change command")
     except ValueError as e:
@@ -107,7 +108,7 @@ def change_contact(args, contacts):
     contacts[username] = phone
     return "Contact updated."
 
-def show_phone(args, contacts):
+def show_phone(args: List[str], contacts: Dict[str, str]) -> str:
     try:
         username = parse_contact_args(args, 1, "Phone command")
     except ValueError as e:
@@ -118,7 +119,7 @@ def show_phone(args, contacts):
 
     return f"Phone: {contacts[username]}"
 
-def show_all(contacts):
+def show_all(contacts: Dict[str, str]) -> str:
     if not contacts:
         return "No contacts found."
 
